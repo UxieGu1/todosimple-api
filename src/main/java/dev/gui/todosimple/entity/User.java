@@ -1,5 +1,6 @@
 package dev.gui.todosimple.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -13,10 +14,10 @@ import java.util.Objects;
 @Table(name = "tb_user")
 public class User {
 
-    public interface createUser{
+    public interface CreateUser{
 
     }
-    public interface updateUser{
+    public interface UpdateUser{
 
     }
 
@@ -26,14 +27,14 @@ public class User {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
-    @NotBlank(groups = createUser.class)
-    @Size(groups = createUser.class, min = 4, max = 100)
+    @NotBlank(groups = CreateUser.class)
+    @Size(groups = CreateUser.class, min = 4, max = 100)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password", nullable = false)
-    @NotBlank(groups = {createUser.class, updateUser.class})
-    @Size(groups = {createUser.class, updateUser.class}, min = 8, max = 60)
+    @NotBlank(groups = {CreateUser.class, UpdateUser.class})
+    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 60)
     private String password;
 
     @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, orphanRemoval = true)
@@ -72,6 +73,7 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore
     public List<Task> getTasks() {
         return tasks;
     }

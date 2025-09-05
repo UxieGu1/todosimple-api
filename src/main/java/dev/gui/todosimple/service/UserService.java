@@ -1,10 +1,8 @@
 package dev.gui.todosimple.service;
 
 import dev.gui.todosimple.entity.User;
-import dev.gui.todosimple.repository.TaskRepository;
 import dev.gui.todosimple.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +26,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
+    @Transactional
     public User create(User user){
         user.setId(null);
         return this.userRepository.save(user);
@@ -40,6 +39,7 @@ public class UserService {
         return this.userRepository.save(newUser);
     }
 
+    @Transactional
     public void delete(Long id){
         findById(id);
         try{
