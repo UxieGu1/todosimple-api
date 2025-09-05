@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import dev.gui.todosimple.entity.Task;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,10 @@ public class TaskService {
     public Task findById(Long id){
         Optional<Task> task = this.taskRepository.findById(id);
         return task.orElseThrow(() -> new RuntimeException("Tarefa com id: " + id + " não encontrado"));
+    }
+
+    public List<Task> findAll() {
+        return this.taskRepository.findAll();
     }
 
     @Transactional
@@ -46,4 +51,6 @@ public class TaskService {
             throw new RuntimeException("Não foi possível excluir pois há entidades relacionadas!");
         }
     }
+
+
 }
