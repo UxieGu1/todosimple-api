@@ -24,8 +24,9 @@ public class TaskService {
         return task.orElseThrow(() -> new RuntimeException("Tarefa com id: " + id + " não encontrado"));
     }
 
-    public List<Task> findAll() {
-        return this.taskRepository.findAll();
+    public List<Task> findAllByUserId(Long userId) {
+        List<Task> tasks = this.taskRepository.findByUser_Id(userId);
+        return tasks;
     }
 
     @Transactional
@@ -43,6 +44,7 @@ public class TaskService {
         return this.taskRepository.save(newTask);
     }
 
+    @Transactional
     public void delete(Long id){
         findById(id);
         try{
