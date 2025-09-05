@@ -2,6 +2,8 @@ package dev.gui.todosimple.controller;
 
 import dev.gui.todosimple.entity.Task;
 import dev.gui.todosimple.service.TaskService;
+import dev.gui.todosimple.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/findById/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id){
         try{
@@ -31,6 +36,7 @@ public class TaskController {
     @GetMapping("/findAllById/{id}")
     public ResponseEntity<List<Task>> findAllById(@PathVariable Long id){
         try{
+            this.userService.findById(id);
             List<Task> tasks = this.taskService.findAllByUserId(id);
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         } catch (Exception e) {
