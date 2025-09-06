@@ -1,5 +1,4 @@
 import api from './api';
-import {spread} from "axios";
 
 export const userService = {
     findById : async (id) => {
