@@ -2,6 +2,8 @@ package dev.gui.todosimple.service;
 
 import dev.gui.todosimple.entity.User;
 import dev.gui.todosimple.repository.TaskRepository;
+//import dev.gui.todosimple.security.UserSpringSecurity;
+import dev.gui.todosimple.service.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import dev.gui.todosimple.entity.Task;
@@ -21,7 +23,8 @@ public class TaskService {
 
     public Task findById(Long id){
         Optional<Task> task = this.taskRepository.findById(id);
-        return task.orElseThrow(() -> new RuntimeException("Tarefa com id: " + id + " não encontrado"));
+        return task.orElseThrow(() -> new ObjectNotFoundException(
+                "Usuário não encontrado! id: " + id + "Tipo: " + Task.class.getName()));
     }
 
     public List<Task> findAllByUserId(Long userId) {
@@ -54,5 +57,7 @@ public class TaskService {
         }
     }
 
-
+//    private Boolean userHasTask(UserSpringSecurity userSpringSecurity, Task task) {
+//        return task.getUser().getId().equals(userSpringSecurity.getId());
+//    }
 }
