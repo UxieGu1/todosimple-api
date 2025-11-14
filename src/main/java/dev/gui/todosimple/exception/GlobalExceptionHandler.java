@@ -1,6 +1,5 @@
 package dev.gui.todosimple.exception;
 
-
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;
@@ -40,14 +39,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     private boolean printStackTrace;
 
     @Override
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException methodArgumentNotValidException,
             HttpHeaders headers,
-            HttpStatusCode status,
+            HttpStatusCode status,  // Mude de HttpStatus para HttpStatusCode
             WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),  // Mantenha HttpStatus.value() aqui
                 "Validation error. Check 'errors' field for details.");
         for (FieldError fieldError : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
             errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());

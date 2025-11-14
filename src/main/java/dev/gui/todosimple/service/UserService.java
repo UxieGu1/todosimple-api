@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @Service
-public class UserService {
+public class UserService{
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

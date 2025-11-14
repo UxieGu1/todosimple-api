@@ -11,7 +11,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Objects;
 
-
 @Component
 public class JWTUtil {
 
@@ -19,42 +18,46 @@ public class JWTUtil {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private String expiration;
+    private Long expiration;
 
     public String generateToken(String username) {
-        SecretKey key = getSecretKey();
+        SecretKey key = getKeyBySecret();
         return Jwts.builder()
                 .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
+                .setExpiration(new Date(System.currentTimeMillis() + this.expiration))
                 .signWith(key)
                 .compact();
     }
 
-
-    private SecretKey getSecretKey(){
-        SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes());
-        return secretKey;
-    };
+    private SecretKey getKeyBySecret() {
+        SecretKey key = Keys.hmacShaKeyFor(this.secret.getBytes());
+        return key;
+    }
 
     public boolean isValidToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-
-        if(Objects.nonNull(claims)){
+        Claims claims = getClaims(token);
+        if (Objects.nonNull(claims)) {
             String username = claims.getSubject();
             Date expirationDate = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
-            if(Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate)){
+            if (Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate))
                 return true;
-            }
         }
         return false;
     }
 
-    private Claims getClaimsFromToken(String token) {
-        SecretKey secretKey = getSecretKey();
+    public String getUsername(String token) {
+        Claims claims = getClaims(token);
+        if (Objects.nonNull(claims))
+            return claims.getSubject();
+        return null;
+    }
+
+    private Claims getClaims(String token) {
+        SecretKey key = getKeyBySecret();
         try {
-            return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-        }catch (Exception e){
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        } catch (Exception e) {
             return null;
         }
     }

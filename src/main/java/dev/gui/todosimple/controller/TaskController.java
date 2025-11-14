@@ -23,7 +23,7 @@ public class TaskController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/findById/{id}")
+        @GetMapping("/findById/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id){
         try{
             Task taskById = this.taskService.findById(id);
